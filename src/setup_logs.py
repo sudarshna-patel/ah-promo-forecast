@@ -1,27 +1,30 @@
-# import os
-# import logging
-# from datetime import datetime
+import os
+import logging
+from datetime import datetime
 
-# # Set up log path
-# log_path = os.path.join(os.getenv("LOG_DIR", "/app/logs"), "train.log")
 
-# # Ensure logs directory exists
-# os.makedirs(os.path.dirname(log_path), exist_ok=True)
+def configure_logs(file_name):
+    # Set up log path
+    log_path = os.path.join(os.getenv("LOG_DIR", "/app/logs"), file_name)
 
-# # Configure logging
-# logging.basicConfig(
-#     filename=log_path,
-#     filemode="a",  # Append mode
-#     format="%(asctime)s - %(levelname)s - %(message)s",
-#     level=logging.INFO
-# )
+    # Ensure logs directory exists
+    os.makedirs(os.path.dirname(log_path), exist_ok=True)
 
-# # Optional: also print logs to stdout (useful for Docker log viewing)
-# console = logging.StreamHandler()
-# console.setLevel(logging.INFO)
-# formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-# console.setFormatter(formatter)
-# logging.getLogger().addHandler(console)
+    # Configure logging
+    logging.basicConfig(
+        filename=log_path,
+        filemode="a",  # Append mode
+        format="%(asctime)s - %(levelname)s - %(message)s",
+        level=logging.INFO,
+    )
+
+    # Optional: also print logs to stdout (useful for Docker log viewing)
+    console = logging.StreamHandler()
+    console.setLevel(logging.INFO)
+    formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+    console.setFormatter(formatter)
+    logging.getLogger().addHandler(console)
+
 
 # # Begin training
 # def train_model():
