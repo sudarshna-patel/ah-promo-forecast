@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Promo Sales Predictor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .layout {
+            display: flex;
+            gap: 20px;
+        }
+
+        .left-panel {
+            width: 1500px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .right-panel {
+            flex-grow: 1;
+        }
+
+        .section {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        input, select {
+            margin: 5px 0;
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px;
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        @media (max-width: 768px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .left-panel {
+                width: 100%;
+            }
+
+            .right-panel {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to Promo Sales Predictor!</h1>
+
+    <div class="layout">
+        <!-- Left Panel: Train, Retrain, Monitor, Load Test -->
+        <div class="left-panel">
+            <div class="section">
+                <form action="/train" method="post">
+                    <h3>Train</h3>
+                    <button type="submit">Train</button>
+                </form>
+            </div>
+
+            <div class="section">
+                <form action="/monitor-training" method="get">
+                    <h3>Monitor Training</h3>
+                    <button type="submit">Load Test</button>
+                </form>
+            </div>
+            
+            <div class="section">
+                <form action="/retrain" method="post">
+                    <h3>Retrain</h3>
+                    <button type="submit">Retrain</button>
+                </form>
+            </div>
+
+            <div class="section">
+                <form action="/monitor" method="get">
+                    <h3>Monitor</h3>
+                    <button type="submit">Monitor</button>
+                </form>
+            </div>
+
+            <div class="section">
+                <form action="/load-test" method="get">
+                    <h3>Load Test</h3>
+                    <button type="submit">Load Test</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Right Panel: Predict -->
+        <div class="right-panel">
+            <div class="section">
+                <form action="/predict" method="post">
+                    <h3>Predict</h3>
+                    <input name="store_count" type="number" placeholder="Store Count" required>
+                    <input name="shelf_capacity" type="number" step="any" placeholder="Shelf Capacity" required>
+                    <input name="promo_shelf_capacity" type="number" placeholder="Promo Shelf Capacity" required>
+                    <label>Is Promo:
+                        <select name="is_promo">
+                            <option value="true">True</option>
+                            <option value="false">False</option>
+                        </select>
+                    </label>
+                    <input name="item_number" type="text" placeholder="Item Number" required>
+                    <input name="category_code" type="text" placeholder="Category Code" required>
+                    <input name="group_code" type="text" placeholder="Group Code" required>
+                    <input name="month" type="text" placeholder="Month" required>
+                    <input name="weekday" type="text" placeholder="Weekday" required>
+                    <input name="unit_sales_7" type="number" step="any" placeholder="Unit Sales 7 Days" required>
+                    <input name="unit_sales_14" type="number" step="any" placeholder="Unit Sales 14 Days" required>
+                    <input name="unit_sales_21" type="number" step="any" placeholder="Unit Sales 21 Days" required>
+                    <button type="submit">Predict</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

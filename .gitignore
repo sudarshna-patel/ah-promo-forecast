@@ -1,1 +1,5 @@
 logs/
+mlruns/
+models/
+
+**/__pycache__/

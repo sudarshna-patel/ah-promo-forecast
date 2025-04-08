@@ -1,0 +1,19 @@
+fastapi
+uvicorn
+scikit-learn
+pandas
+mlflow
+python-multipart
+pydantic
+joblib
+pyyaml
+
+python-dotenv
+ruff
+pre-commit
+jinja2
+# celery
+# redis
+asyncio
+
+
