@@ -12,20 +12,40 @@ from dotenv import load_dotenv
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error
 from mlflow.models import infer_signature
-
+from configs.load_configs import config_params
 from src.data_prep.preparation import preprocess
 from src.data_prep.data_split import split_data
+from src.data_prep.data_loader import load_dataset
 
 load_dotenv(override=True)
-# mlflow_uri = os.getenv('MLFLOW_TRACKING_URI')
 
-## Load the parameters from params.yaml
-params = yaml.safe_load(open("configs/params.yaml"))["train"]
+
+def read_data(params):
+    data_path = os.getenv("DATA_PATH", "data")
+    input_path = os.path.join(data_path, params["input"])
+
+    # load data
+    return load_dataset(path=input_path)
+
+
+def save_model(model, params):
+    # create the directory to save the model
+    model_path = os.getenv("MODEL_PATH", "models")
+    model_file_path = os.path.join(model_path, params["model"])
+    logging.info(model_file_path)
+    # Save the model to disk
+    pickle.dump(model, open(model_file_path, "wb"))
+
+    logging.info(f"Model saved to path {model_file_path}")
 
 
 def train_model():
+    ## Load the parameters from params.yaml
+    params = config_params["train"]
+
+    df_prep = read_data(params=params)
     # Run preprocess in a separate thread
-    df_processed = preprocess()
+    df_processed = preprocess(df_prep=df_prep)
 
     # Start an experiment
     experiment_name = "promo_sales_predictor"
@@ -33,16 +53,6 @@ def train_model():
     mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI", "/app/mlruns"))
 
     logging.info("START TRAINING")
-
-    # with mlflow.start_run():
-    #     run_name = mlflow.active_run().info.run_name
-    #     experiment_id = mlflow.active_run().info.experiment_id
-
-    #     logging.info(f"Experiment Name: {experiment_name}")
-    #     logging.info(f"Run Name: {run_name}")
-    #     logging.info(f"Experiment ID: {experiment_id}")
-
-    #     mlflow.log_metric("example", 123)
 
     ## start the MLFLOW run
     with mlflow.start_run():
@@ -99,11 +109,4 @@ def train_model():
             mlflow.sklearn.log_model(rf_model, "model", signature=signature)
             logging.info("Model logged with signature to local store.")
 
-        ## create the directory to save the model
-        model_path = params["model"]
-        os.makedirs(os.path.dirname(model_path), exist_ok=True)
-
-        # Save the model to disk
-        pickle.dump(rf_model, open(model_path, "wb"))
-
-        logging.info(f"Model saved to path {model_path}")
+        save_model(model=rf_model, params=params)

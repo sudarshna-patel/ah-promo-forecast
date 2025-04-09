@@ -28,8 +28,6 @@ async def homepage(request: Request):
 async def trigger_training(background_tasks: BackgroundTasks):
     """Trigger training script asynchronously in background."""
     try:
-        # Timeout for the background task (e.g., 1 hour)
-        # await asyncio.wait_for(train_model_async(), timeout=3600)  # 3600 seconds = 1 hour
         logging.info("testtttt")
         background_tasks.add_task(train_model_async)
         return {"message": "Training has started in background."}
@@ -69,7 +67,6 @@ async def predict(
             unit_sales_14=unit_sales_14,
             unit_sales_21=unit_sales_21,
         )
-        # return {"message": f"Promo uplift predictor is running! {input_data}"}
         prediction = make_prediction(input_data)
         if prediction == "NA":
             return {"message": "model not found, please train first"}
@@ -99,7 +96,7 @@ async def stream_training_logs():
     return StreamingResponse(iter_log_file(), media_type="text/plain")
 
 
-@app.get("/monitor")
+@app.get("/monitor-performance")
 async def monitor_logs(limit: Optional[int] = Query(10, ge=1, le=100)):
     try:
         log_file = os.path.join(os.getenv("LOG_DIR", "/app/logs"), LOG_PREDICT)
@@ -108,10 +105,6 @@ async def monitor_logs(limit: Optional[int] = Query(10, ge=1, le=100)):
             # Get last N lines
             recent_logs = lines[-limit:]
             return [json.loads(line) for line in recent_logs]
-        # return {
-        #     "status": "Placeholder Everything is running smoothly!",
-        #     "timestamp": time.time(),
-        # }
     except Exception as e:
         return {"error": str(e)}
 

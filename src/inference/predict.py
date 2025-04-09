@@ -4,21 +4,26 @@ import pickle
 import json
 import os
 import logging
+from dotenv import load_dotenv
 from datetime import datetime
 from src.utils import convert_log_to_units
 from src.constants import LOG_PREDICT
+from configs.load_configs import config_params
+
+load_dotenv(override=True)
 
 
 def load_model():
-    model_path = "models/forecasting_model.pkl"
-    # model_path = os.path.join(os.getcwd(), "models", "forecasting_model.pkl")
-    # print(os.path.join(os.getcwd(), "models", "forecasting_model.pkl"))
+    # model_path = "models/forecasting_model.pkl"
 
-    logging.info(f"model path {model_path}")
+    model_path = os.getenv("MODEL_PATH", "models")
+    model_file_path = os.path.join(model_path, config_params["inference"]["model"])
+    logging.info(f"model path {model_file_path}")
+
     model = None
-    if os.path.isfile(model_path):
+    if os.path.isfile(model_file_path):
         logging.info("model path is present")
-        with open(model_path, "rb") as f:
+        with open(model_file_path, "rb") as f:
             model = pickle.load(f)
         logging.info("Model loaded successfully.")
     else:

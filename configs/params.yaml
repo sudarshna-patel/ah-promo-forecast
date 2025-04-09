@@ -1,14 +1,11 @@
-preprocess:
-  input: data/raw/dataset.csv
-  output: data/processed/dataset.csv
-
 train:
-  data: data/processed/dataset.csv
-  model: models/forecasting_model.pkl
+  input: dataset.csv # placeholder: not using it
+  model: forecasting_model.pkl
   random_state: 42
   n_estimators: 100
   # max_features: 10
   # max_depth: 5
   range_of_lags: [7, 14, 21] # 1 week ago, 2 weeks ago, 3 weeks ago
   feature_to_lag: 'UnitSales'
-  log_path: "logs/train.log"
+inference:
+  model: forecasting_model.pkl
