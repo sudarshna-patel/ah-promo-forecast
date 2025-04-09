@@ -8,9 +8,25 @@ from datetime import datetime
 from src.utils import convert_log_to_units
 from src.constants import LOG_PREDICT
 
-model_path = "models/forecasting_model.pkl"
-# model_path = os.getenv("MODEL_PATH", "models/model.joblib")
-loaded_model = pickle.load(open(model_path, "rb"))
+
+def load_model():
+    model_path = "models/forecasting_model.pkl"
+    # model_path = os.path.join(os.getcwd(), "models", "forecasting_model.pkl")
+    # print(os.path.join(os.getcwd(), "models", "forecasting_model.pkl"))
+
+    logging.info(f"model path {model_path}")
+    model = None
+    if os.path.isfile(model_path):
+        logging.info("model path is present")
+        with open(model_path, "rb") as f:
+            model = pickle.load(f)
+        logging.info("Model loaded successfully.")
+    else:
+        logging.info("Model file not found — skipping load.")
+    return model
+
+
+# LOADED_MODEL = load_model()
 
 
 def log_prediction(input_data, prediction_output):
@@ -54,6 +70,10 @@ snake_to_camel_mapping = {
 
 
 def make_prediction(input_data: PromoInput) -> float:
+    LOADED_MODEL = load_model()
+    if LOADED_MODEL is None:
+        logging.info("loaded model is None")
+        return "NA"
     # def make_prediction() -> float:
     # columns = ['StoreCount', 'ShelfCapacity', 'PromoShelfCapacity', 'IsPromo',
     #             'ItemNumber', 'CategoryCode', 'GroupCode', 'month', 'weekday',
@@ -65,7 +85,7 @@ def make_prediction(input_data: PromoInput) -> float:
     #     ],
     #     columns=columns,
     # )
-    print(input_data)
+    logging.info(input_data)
     input_df = pd.DataFrame([input_data.dict()])
     # input_df = pd.DataFrame([input_data])
     input_df["item_number"] = input_df["item_number"].astype(int).astype("category")
@@ -76,7 +96,7 @@ def make_prediction(input_data: PromoInput) -> float:
 
     input_df.rename(columns=snake_to_camel_mapping, inplace=True)
 
-    pred = loaded_model.predict(input_df)
+    pred = LOADED_MODEL.predict(input_df)
     # Log the prediction
     log_prediction(input_data, pred)
 

@@ -10,7 +10,8 @@ from app.schemas import PromoInput
 from src.inference.predict import make_prediction
 from src.training.training_async import train_model_async
 from src.setup_logs import configure_logs
-from src.constants import LOG_ALL, LOG_TRAIN, LOG_PREDICT
+from src.constants import LOG_ALL, LOG_PREDICT
+import logging
 
 configure_logs(file_name=LOG_ALL)
 
@@ -29,6 +30,7 @@ async def trigger_training(background_tasks: BackgroundTasks):
     try:
         # Timeout for the background task (e.g., 1 hour)
         # await asyncio.wait_for(train_model_async(), timeout=3600)  # 3600 seconds = 1 hour
+        logging.info("testtttt")
         background_tasks.add_task(train_model_async)
         return {"message": "Training has started in background."}
     except asyncio.TimeoutError:
@@ -69,7 +71,10 @@ async def predict(
         )
         # return {"message": f"Promo uplift predictor is running! {input_data}"}
         prediction = make_prediction(input_data)
-        return {"message": f"Promo uplift sales value is {prediction}"}
+        if prediction == "NA":
+            return {"message": "model not found, please train first"}
+        else:
+            return {"message": f"Promo uplift sales value is {prediction}"}
     except Exception as e:
         return {"error": str(e)}
 
@@ -83,7 +88,7 @@ async def retrain_model():
 @app.get("/monitor-training")
 async def stream_training_logs():
     def iter_log_file():
-        log_path = os.path.join(os.getenv("LOG_DIR", "/app/logs"), LOG_TRAIN)
+        log_path = os.path.join(os.getenv("LOG_DIR", "/app/logs"), LOG_ALL)
         with open(log_path, "r") as log_file:
             while True:
                 line = log_file.readline()
