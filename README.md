@@ -87,10 +87,19 @@ Download the ZIP file and go to the project directory in your terminal.
 # docker-compose up --build
 podman build -t promo-forecast-app .
 ```
+OR
+```bash
+# docker-compose up --build
+docker build -t promo-forecast-app .
+```
 
 ### 3. Run the container with memory limit
 ```bash
 podman run --rm --memory="5g" -p 5000:5000 -p 8000:8000 -v $(pwd):/app promo-forecast-app
+```
+OR
+```bash
+docker run --rm --memory="5g" -p 5000:5000 -p 8000:8000 -v $(pwd):/app promo-forecast-app
 ```
 
 This will:

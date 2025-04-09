@@ -14,8 +14,6 @@ load_dotenv(override=True)
 
 
 def load_model():
-    # model_path = "models/forecasting_model.pkl"
-
     model_path = os.getenv("MODEL_PATH", "models")
     model_file_path = os.path.join(model_path, config_params["inference"]["model"])
     logging.info(f"model path {model_file_path}")
@@ -79,17 +77,7 @@ def make_prediction(input_data: PromoInput) -> float:
     if LOADED_MODEL is None:
         logging.info("loaded model is None")
         return "NA"
-    # def make_prediction() -> float:
-    # columns = ['StoreCount', 'ShelfCapacity', 'PromoShelfCapacity', 'IsPromo',
-    #             'ItemNumber', 'CategoryCode', 'GroupCode', 'month', 'weekday',
-    #             'UnitSales_-7', 'UnitSales_-14', 'UnitSales_-21']
 
-    # custom_example = pd.DataFrame(
-    #     data=[
-    #         (781, 12602.000, 4922,True, 8646, 7292, 5494, 11, 3, 6.190, 6.217, 6.075),
-    #     ],
-    #     columns=columns,
-    # )
     logging.info(input_data)
     input_df = pd.DataFrame([input_data.dict()])
     # input_df = pd.DataFrame([input_data])
@@ -143,3 +131,15 @@ if __name__ == "__main__":
 #     "UnitSales_-21": "unit_sales_21",
 #     "UnitSales": "unit_sales",
 # }
+
+# def make_prediction() -> float:
+# columns = ['StoreCount', 'ShelfCapacity', 'PromoShelfCapacity', 'IsPromo',
+#             'ItemNumber', 'CategoryCode', 'GroupCode', 'month', 'weekday',
+#             'UnitSales_-7', 'UnitSales_-14', 'UnitSales_-21']
+
+# custom_example = pd.DataFrame(
+#     data=[
+#         (781, 12602.000, 4922,True, 8646, 7292, 5494, 11, 3, 6.190, 6.217, 6.075),
+#     ],
+#     columns=columns,
+# )
