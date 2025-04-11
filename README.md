@@ -55,6 +55,8 @@ Python dependencies are listed in `requirements.txt`.
 
 ## 🧱 Architecture Overview
 
+![Promo Uplift Architecture](architecture.png)
+
 ```plaintext
 Client --> FastAPI App --> Training Module --> MLflow (local server)
                                  |
@@ -87,23 +89,35 @@ In production, this can be extended to:
 
 ## ⚙️ How to Run
 
-### 1. Clone and Navigate
+### 1. Clone and Navigate  
 Download the ZIP file and go to the project directory in your terminal.
 
-### 2. Build and Run Docker
+### 2. Run with Script  
+Use the provided shell script to build and start the application:
+
+```bash
+chmod +x run-promo-app.sh
+./run-promo-app.sh
+```
+
+The above steps will:
+- Build the Docker image (`promo-forecast-app`)
+- Run the container with memory limit
+- Launch the FastAPI server on `http://localhost:8000`
+- Launch the MLflow server on `http://localhost:8080`
+
+OR instead of running shell script in Step 2, you could also run the following commands individually in the terminal to start the servers.
+
+### 2a. Build and Run Docker
 ```bash
 # docker-compose up --build
 docker build -t promo-forecast-app .
 ```
 
-### 3. Run the container with memory limit
+### 2b. Run the container with memory limit
 ```bash
 docker run --rm --memory="5g" -p 8080:8080 -p 8000:8000 promo-forecast-app
 ```
-
-This will:
-- Launch the FastAPI server on `http://localhost:8000`
-- Launch the MLflow server on `http://localhost:8080`
 
 ### 4. Access
 - **FastAPI Swagger UI**: [http://localhost:8000/docs](http://localhost:8000/docs)  
@@ -114,14 +128,15 @@ This will:
 ## 🖥 UI Walkthrough
 
 ### FastAPI UI (Swagger)
-Goto: [http://localhost:8000/docs]
-Step 1. Click on **Train** button to start the training
-Step 2. Go back to home page by clicking back arrow in the browser
-Step 3. You could click **Monitor Training** to see trainign logs
-Step 4. Go back to home page by clicking back arrow in the browser
-Step 5. Click on **Predict** after filling in the form provided
-Step 6. Click on **Monitor Performance** to keep track of inputs with their predicted values
-Step 7. Click on **Retrain** or **Load Testing**, these are just placeholders
+
+Goto: [http://localhost:8000/docs](http://localhost:8000/docs)
+- Step 1. Click on **Train** button to start the training
+- Step 2. Go back to home page by clicking back arrow in the browser
+- Step 3. You could click **Monitor Training** to see trainign logs
+- Step 4. Go back to home page by clicking back arrow in the browser
+- Step 5. Click on **Predict** after filling in the form provided
+- Step 6. Click on **Monitor Performance** to keep track of inputs with their predicted values
+- Step 7. Click on **Retrain** or **Load Testing**, these are just placeholders
 
 ### MLflow UI
 Available at: [http://localhost:8080]
