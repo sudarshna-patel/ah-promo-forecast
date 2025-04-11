@@ -7,8 +7,8 @@ async def train_model_async():
     try:
         logging.info("Async Training")
         await asyncio.to_thread(train_model)
-        logging.info("Training finished.")
+        logging.info("Training finished")
     except asyncio.TimeoutError:
-        logging.error("Training timed out.")
+        logging.error("Training timed out")
     except Exception as e:
         logging.error(f"Error during training: {e}")

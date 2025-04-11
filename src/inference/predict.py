@@ -16,11 +16,10 @@ load_dotenv(override=True)
 def load_model():
     model_path = os.getenv("MODEL_PATH", "models")
     model_file_path = os.path.join(model_path, config_params["inference"]["model"])
-    logging.info(f"model path {model_file_path}")
+    logging.info(f"model will be loaded from path {model_file_path}")
 
     model = None
     if os.path.isfile(model_file_path):
-        logging.info("model path is present")
         with open(model_file_path, "rb") as f:
             model = pickle.load(f)
         logging.info("Model loaded successfully.")
@@ -33,7 +32,6 @@ def load_model():
 
 
 def log_prediction(input_data, prediction_output):
-    logging.info("log prediction")
     # Set up log directory and file path
     log_dir = os.getenv(
         "LOG_DIR", "/app/logs"
@@ -78,7 +76,6 @@ def make_prediction(input_data: PromoInput) -> float:
         logging.info("loaded model is None")
         return "NA"
 
-    logging.info(input_data)
     input_df = pd.DataFrame([input_data.dict()])
     # input_df = pd.DataFrame([input_data])
     input_df["item_number"] = input_df["item_number"].astype(int).astype("category")
@@ -93,7 +90,7 @@ def make_prediction(input_data: PromoInput) -> float:
     # Log the prediction
     log_prediction(input_data, pred)
 
-    print(float(pred[0]), convert_log_to_units(pred[0]))
+    # logging.info(float(pred[0]), convert_log_to_units(pred[0]))
     return int(convert_log_to_units(pred[0]))
 
 

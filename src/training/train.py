@@ -32,7 +32,7 @@ def save_model(model, params):
     # create the directory to save the model
     model_path = os.getenv("MODEL_PATH", "models")
     model_file_path = os.path.join(model_path, params["model"])
-    logging.info(model_file_path)
+
     # Save the model to disk
     pickle.dump(model, open(model_file_path, "wb"))
 
@@ -52,7 +52,7 @@ def train_model():
     mlflow.set_experiment(experiment_name)
     mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI", "/app/mlruns"))
 
-    logging.info("START TRAINING")
+    logging.info("STARTING TRAINING")
 
     ## start the MLFLOW run
     with mlflow.start_run():
@@ -83,17 +83,16 @@ def train_model():
             max_depth=len(X_train.columns),
         )
 
-        logging.info(f"Fitting random forest model")
+        logging.info(f"Fitting Random Forest Model")
         # Train the model. Takes a couple of minutes.
-        logging.info("TRAINING")
         rf_model = rfr.fit(X_train, y_train)
-        logging.info("TRAINED")
+        logging.info("Fitted the RF Model")
 
         # ## predict and evaluate the model
         rf_y_pred = rf_model.predict(X_test)
 
         # and the MAE
-        logging.info(mean_absolute_error(rf_y_pred, y_test))
+        logging.info(f"Test MAE: {mean_absolute_error(rf_y_pred, y_test)}")
 
         ## Log additional metrics
         mlflow.log_metric("mean_absolute_error", mean_absolute_error(rf_y_pred, y_test))

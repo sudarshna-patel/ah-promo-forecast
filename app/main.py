@@ -28,7 +28,6 @@ async def homepage(request: Request):
 async def trigger_training(background_tasks: BackgroundTasks):
     """Trigger training script asynchronously in background."""
     try:
-        logging.info("testtttt")
         background_tasks.add_task(train_model_async)
         return {"message": "Training has started in background."}
     except asyncio.TimeoutError:

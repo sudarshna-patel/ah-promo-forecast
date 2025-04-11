@@ -1,8 +1,6 @@
----
-
 # ✨ Personal Note
 
-First of all, let me just say — I absolutely loved working on this project!
+First of all, let me just say — I absolutely loved working on this project and exploring ways to turn a notebook into a full ML app.
 
 ---
 
@@ -24,13 +22,23 @@ However, due to the limited time, I decided to mainly focus on **train** and **t
 3. Model input/output shape is consistent  
 4. No retraining on new data for now – training is manual or on demand  
 5. A single machine is sufficient (e.g., local dev, Docker, or lightweight cloud VM)  
-6. Inference can be one-off or served via API  
-7. Docker compatibility is required  
-8. Model artifacts are stored locally  
-9. Model to be loaded only once  
-10. Read/write paths are relative  
-11. No actual CI/CD pipeline implemented, but will be discussed  
-12. No need for complex orchestration tools  
+6. Inference can be one-off or served via API     
+7. Model artifacts are stored locally  
+8. Model to be loaded only once  
+9. Read/write paths are relative  
+10. No actual CI/CD pipeline implemented, but will be discussed  
+11. No need for complex orchestration tools  
+
+---
+
+## 📋 Requirements
+
+Make sure to have the following installed:
+
+- Docker / Podman
+- Python 3.11
+
+Python dependencies are listed in `requirements.txt`.
 
 ---
 
@@ -85,30 +93,42 @@ Download the ZIP file and go to the project directory in your terminal.
 ### 2. Build and Run Docker
 ```bash
 # docker-compose up --build
-podman build -t promo-forecast-app .
-```
-OR
-```bash
-# docker-compose up --build
 docker build -t promo-forecast-app .
 ```
 
 ### 3. Run the container with memory limit
 ```bash
-podman run --rm --memory="5g" -p 5000:5000 -p 8000:8000 -v $(pwd):/app promo-forecast-app
-```
-OR
-```bash
-docker run --rm --memory="5g" -p 5000:5000 -p 8000:8000 -v $(pwd):/app promo-forecast-app
+docker run --rm --memory="5g" -p 8080:8080 -p 8000:8000 promo-forecast-app
 ```
 
 This will:
 - Launch the FastAPI server on `http://localhost:8000`
-- Launch the MLflow server on `http://localhost:5000`
+- Launch the MLflow server on `http://localhost:8080`
 
 ### 4. Access
 - **FastAPI Swagger UI**: [http://localhost:8000/docs](http://localhost:8000/docs)  
-- **MLflow UI**: [http://localhost:5000](http://localhost:5000)
+- **MLflow UI**: [http://localhost:8080](http://localhost:8080)
+
+---
+
+## 🖥 UI Walkthrough
+
+### FastAPI UI (Swagger)
+Goto: [http://localhost:8000/docs]
+Step 1. Click on **Train** button to start the training
+Step 2. Go back to home page by clicking back arrow in the browser
+Step 3. You could click **Monitor Training** to see trainign logs
+Step 4. Go back to home page by clicking back arrow in the browser
+Step 5. Click on **Predict** after filling in the form provided
+Step 6. Click on **Monitor Performance** to keep track of inputs with their predicted values
+Step 7. Click on **Retrain** or **Load Testing**, these are just placeholders
+
+### MLflow UI
+Available at: [http://localhost:8080]
+Tracks:
+- Parameters used in training
+- Metrics (currently minimal)
+- Artifacts like saved models
 
 ---
 
@@ -137,12 +157,13 @@ project/
 └── README.md
 
 ```
+
 ---
 
 ## 🛠 Engineering Assumptions & Limitations
 
 - Training is triggered via API and runs **as a background task** to avoid blocking.
-- **Celery** was considered for background task management, but due to system limitations, it's not implemented. Instead, `BackgroundTasks` and `gunicorn --timeout 3600` with workers was used.
+- **Celery** was considered for background task management, but due to the simplicity of the system and time limitations, it's not implemented. Instead, `BackgroundTasks` and `gunicorn` with workers was used.
 - ML models are saved **locally and as MLflow artifacts**; in production, these should be stored in **S3 or similar**.
 - **Logging** is rudimentary and local. Cloud-based centralized logging (e.g., AWS CloudWatch) is recommended for production.
 - The **monitoring and load testing endpoints are placeholders** to show how they could be structured.
@@ -154,6 +175,7 @@ project/
 
 Suggested production stack:
 - **FastAPI app** hosted on **AWS EC2**
+- **Data** stored in **Redshift**, **RDS** or **S3**
 - **MLflow server** also on EC2, or separate instance
 - **Model artifacts/logs** stored in **S3**
 - **Redis + Celery** for distributed training jobs
@@ -175,6 +197,6 @@ Suggested production stack:
 
 ## 🙌 Closing Thoughts
 
-I genuinely enjoyed building this project and look forward to walking you through my thought process during the interview.
+I genuinely enjoyed building this project and am looking forward to walking you through my thought process during the interview.
 
 ---
