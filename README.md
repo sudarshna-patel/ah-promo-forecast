@@ -92,7 +92,7 @@ In production, this can be extended to:
 ### 1. Clone and Navigate  
 Download the ZIP file and go to the project directory in your terminal.
 
-### 2. Run with Script  
+### 2. Run with Script, to build and run a container
 Use the provided shell script to build and start the application:
 
 ```bash
@@ -108,19 +108,18 @@ The above steps will:
 
 OR instead of running shell script in Step 2, you could also run the following commands individually in the terminal to start the servers.
 
-### 2a. Build and Run Docker
+### 2a. Build the container
 ```bash
-# docker-compose up --build
 docker build -t promo-forecast-app .
 ```
 
 ### 2b. Run the container with memory limit
 ```bash
-docker run --rm --memory="5g" -p 8080:8080 -p 8000:8000 promo-forecast-app
+docker run --rm --memory="5g" --name promo-forecast-app-container -p 8080:8080 -p 8000:8000 promo-forecast-app
 ```
 
 ### 4. Access
-- **FastAPI Swagger UI**: [http://localhost:8000/docs](http://localhost:8000/docs)  
+- **FastAPI Swagger UI**: [http://localhost:8000](http://localhost:8000)  
 - **MLflow UI**: [http://localhost:8080](http://localhost:8080)
 
 ---
@@ -129,7 +128,7 @@ docker run --rm --memory="5g" -p 8080:8080 -p 8000:8000 promo-forecast-app
 
 ### FastAPI UI (Swagger)
 
-Goto: [http://localhost:8000/docs](http://localhost:8000/docs)
+Goto: [http://localhost:8000](http://localhost:8000)
 - Step 1. Click on **Train** button to start the training
 - Step 2. Go back to home page by clicking back arrow in the browser
 - Step 3. You could click **Monitor Training** to see trainign logs
@@ -139,7 +138,8 @@ Goto: [http://localhost:8000/docs](http://localhost:8000/docs)
 - Step 7. Click on **Retrain** or **Load Testing**, these are just placeholders
 
 ### MLflow UI
-Available at: [http://localhost:8080]
+Available at: [http://localhost:8080](http://localhost:8080)
+
 Tracks:
 - Parameters used in training
 - Metrics (currently minimal)

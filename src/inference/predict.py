@@ -14,6 +14,7 @@ load_dotenv(override=True)
 
 
 def load_model():
+    """Loads an existing model"""
     model_path = os.getenv("MODEL_PATH", "models")
     model_file_path = os.path.join(model_path, config_params["inference"]["model"])
     logging.info(f"model will be loaded from path {model_file_path}")
@@ -32,6 +33,9 @@ def load_model():
 
 
 def log_prediction(input_data, prediction_output):
+    """
+    logs each prediction into a file
+    """
     # Set up log directory and file path
     log_dir = os.getenv(
         "LOG_DIR", "/app/logs"
