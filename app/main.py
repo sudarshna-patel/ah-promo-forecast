@@ -13,10 +13,15 @@ from src.setup_logs import configure_logs
 from src.constants import LOG_ALL, LOG_PREDICT
 import logging
 
-configure_logs(file_name=LOG_ALL)
+# configure_logs(file_name=LOG_ALL)
 
 app = FastAPI()
 templates = Jinja2Templates(directory="app/templates")
+
+
+@app.on_event("startup")
+async def setup():
+    configure_logs(file_name=LOG_ALL)
 
 
 @app.get("/", response_class=HTMLResponse)
