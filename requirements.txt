@@ -12,5 +12,4 @@ ruff
 pre-commit
 jinja2
 asyncio
-
-
+pytest
