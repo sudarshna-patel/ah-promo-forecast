@@ -1,12 +1,6 @@
-# ✨ Personal Note
-
-First of all, let me just say — I absolutely loved working on this project and exploring ways to turn a notebook into a full ML app.
-
----
-
 # 📈 Promo Uplift ML Application
 
-This project contains a machine learning application that predicts sales uplift during promotional campaigns for Albert Heijn. The application is built using **FastAPI** for the web interface, **MLflow** for experiment tracking and model serving, and **Docker** for containerized deployment.
+This project contains a machine learning application that predicts sales uplift during promotional campaigns for a retailer. The application is built using **FastAPI** for the web interface, **MLflow** for experiment tracking and model serving, and **Docker** for containerized deployment.
 
 My vision was to build a platform where a user could Train, Predict, See training progress, Retrain the model, Monitor model performance and Load test the model. Additionally, I also wanted to include unit tests and integration tests. And, lastly, I also wanted to deploy it to the cloud using a CI/CD pipeline.  
 Since in this task, I'm assuming hyperparameter tuning isn't necessary, it could have been implemented in the training module while tracking via MLflow — allowing the best model to be registered and served.
@@ -207,11 +201,3 @@ Suggested production stack:
 - Secure MLflow access with basic auth or OAuth
 - Better error handling and input validation
 - Retraining module implementation
-
----
-
-## 🙌 Closing Thoughts
-
-I genuinely enjoyed building this project and am looking forward to walking you through my thought process during the interview.
-
----
